@@ -1,3 +1,48 @@
 # .upsun/config.yaml
-# Minimal config to use existing .platform* files (compat)
-version: 1
+applications:
+  ll_project:
+    type: "python:3.13"
+
+    relationships:
+      database: "db:postgresql"
+
+    dependencies:
+      python3:
+        pip: "*"
+
+    hooks:
+      build: |
+        pip install --upgrade pip
+        pip install -r requirements.txt
+        # 如果 requirements_remote.txt 是你线上专用的，也可以留着
+        pip install -r requirements_remote.txt
+        python manage.py collectstatic --noinput
+      deploy: |
+        python manage.py migrate --noinput
+
+    web:
+      upstream:
+        socket_family: unix
+      commands:
+        start: "gunicorn -w 4 -b unix:$SOCKET ll_project.wsgi:application"
+      locations:
+        "/":
+          passthru: true
+        "/static":
+          root: "static"
+          expires: 1h
+          allow: true
+
+services:
+  db:
+    type: postgresql:12
+    disk: 1024
+
+routes:
+  "https://{default}/":
+    type: upstream
+    upstream: "ll_project:http"
+
+  "https://www.{default}/":
+    type: redirect
+    to: "https://{default}/"
