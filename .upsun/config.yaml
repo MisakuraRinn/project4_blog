@@ -35,7 +35,7 @@ applications:
 
 services:
   db:
-    type: postgresql:12
+    type: postgresql:14
 
 routes:
   "https://{default}/":
