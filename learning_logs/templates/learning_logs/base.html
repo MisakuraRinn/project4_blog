@@ -1,12 +1,29 @@
+{%load static%}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Learning Log</title>
-  {%load django_bootstrap5%}
-  {%bootstrap_css%}
-  {%bootstrap_javascript%}
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning Log</title>
+    <link rel="stylesheet" href="{% static 'css/codehilite.css' %}">
+
+    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <!-- Live2DCubismCore -->
+    <script src="https://cdn.jsdelivr.net/gh/litstronger/live2d-moc3@master/js/frame/live2dcubismcore.min.js"></script>
+    <!-- Include Pixi. -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.6.1/pixi.min.js"></script>
+    <!-- Include Cubism Components. -->
+    <script src="https://cdn.jsdelivr.net/gh/litstronger/live2d-moc3@master/js/live2dcubismframework.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/litstronger/live2d-moc3@master/js/live2dcubismpixi.js"></script>
+    <!-- User's Script -->
+    <script src="https://cdn.jsdelivr.net/gh/litstronger/live2d-moc3@master/js/l2d.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/litstronger/live2d-moc3@master/js/main.js"></script>
+
+
+    {%load django_bootstrap5%}
+    {%bootstrap_css%}
+    {%bootstrap_javascript%}
+    <!-- 代码高亮样式 -->
 </head>
 
 <body>
@@ -34,7 +51,7 @@
                 Hello,{{user.username}}
               </span>
             </li>
-          {%else%}
+            {%else%}
             <li class="nav-item">
               <a class="nav-link" href="{%url 'accounts:register'%}">Rigister</a>
             </li>
@@ -43,26 +60,41 @@
                 Log in
               </a>
             </li>
-          {%endif%}
-        </ul>
-        {%if user.is_authenticated%}
+            {%endif%}
+          </ul>
+          {%if user.is_authenticated%}
           <form action="{%url 'accounts:logout'%}" method="post">
             {%csrf_token%}
             <button name="submit" class="btn btn-outline-secondary btn-sm">Log out</button>
           </form>
-        {%endif%}
+          {%endif%}
+        </div>
       </div>
+    </nav>
+    <!-- 定义导航栏的代码到此结束 -->
+    <main class="container">
+      <div class="pb-2 mb-2 border-bottom">
+        {%block page_header%}{%endblock page_header%}
+      </div>
+      <div>
+        {%block content%}{%endblock content%}
+      </div>
+    </main>
+    
+    <div class="Canvas"  id="L2dCanvas">
+    <script>
+        var config = {
+            width: window.innerWidth*0.8,
+            height: window.innerHeight/2,
+            left: window.innerHeight+'px',
+            bottom: '0px',
+            basePath: 'https://cdn.jsdelivr.net/gh/alg-wiki/AzurLaneL2DViewer@gh-pages/assets',
+            role: 'xuefeng_3',
+            opacity: 1,
+            mobile: false
+        }
+        var v = new Viewer(config); 
+    </script>
     </div>
-  </nav>
-  <!-- 定义导航栏的代码到此结束 -->
-  <main class="container">
-    <div class="pb-2 mb-2 border-bottom">
-      {%block page_header%}{%endblock page_header%}
-    </div>
-    <div>
-      {%block content%}{%endblock content%}
-    </div>
-  </main>
-  
 </body>
-</html>
+</html> 

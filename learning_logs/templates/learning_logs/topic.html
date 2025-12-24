@@ -1,7 +1,8 @@
 {%extends 'learning_logs/base.html'%}
+{%load markdownify%}
 {%block page_header%}
   <h1>{{topic.text}}</h1>
-{%endblock page_header%}
+  {%endblock page_header%}
 {%block content%}
   <p>
     <a href="{%url 'learning_logs:new_entry' topic.id%}">Add new entry</a>
@@ -19,7 +20,8 @@
       </h4>
       {% comment %} 包含条目文本的正文 {% endcomment %}
       <div class="card-body">
-        {{entry.text|linebreaks}}
+        {% comment %} {{entry.text|linebreaks}} {% endcomment %}
+        {{entry.text|markdownify}}
       </div>
     </div>
   {%empty%}

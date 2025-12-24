@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'accounts',
     #第三方应用程序
     'django_bootstrap5',
+    'markdownify',
     #默认添加的应用程序
     'django.contrib.admin',
     'django.contrib.auth',
@@ -122,10 +123,47 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+# 如果你用项目级 static 目录
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
+
 # 我的设置
 LOGIN_REDIRECT_URL='learning_logs:index'
 LOGOUT_REDIRECT_URL='learning_logs:index'
 LOGIN_URL='accounts:login'
+
+# 可选：限制允许的 HTML 标签/属性（更安全）
+MARKDOWNIFY = {
+    "default": {
+        # 关键：开启 fenced_code + codehilite
+        "MARKDOWN_EXTENSIONS": [
+            "fenced_code",
+            "codehilite",
+            "markdown.extensions.tables", 
+        ],
+        "MARKDOWN_EXTENSION_CONFIGS": {
+            "codehilite": {
+                "guess_lang": False,
+                "noclasses": False,  # 用 class（配合 codehilite.css）
+            }
+        },
+
+        # 关键：白名单要允许 codehilite 用到的标签/属性
+        "WHITELIST_TAGS": [
+            "div",
+            "p","a","strong","em","ul","ol","li",
+            "pre","code","span",   # span 必须允许，否则高亮会被清洗掉
+            "table","thead","tbody","tr","th","td",
+            
+        ],
+        "WHITELIST_ATTRS": {
+            "a": ["href", "title", "rel"],
+            "*": ["class"],        # class 必须允许，否则 codehilite/language-xxx 会被清掉
+        },
+    }
+}
+
 
 # Platform.sh设置
 from platformshconfig import Config
