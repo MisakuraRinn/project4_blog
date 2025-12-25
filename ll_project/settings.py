@@ -171,7 +171,8 @@ config=Config()
 if config.is_valid_platform():
     ALLOWED_HOSTS.append(".platformsh.site")
     if config.appDir:
-        STATIC_ROOT=BASE_DIR/'static'
+        STATIC_ROOT = Path(config.appDir) / 'staticfiles'
+
     if config.projectEntropy:
         SECRET_KEY=config.projectEntropy
     if not config.in_build():
