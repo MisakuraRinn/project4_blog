@@ -121,7 +121,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 
 # 如果你用项目级 static 目录
 STATICFILES_DIRS = [
@@ -171,7 +171,7 @@ config=Config()
 if config.is_valid_platform():
     ALLOWED_HOSTS.append(".platformsh.site")
     if config.appDir:
-        STATIC_ROOT=Path(config.appDir)/'static'
+        STATIC_ROOT=BASE_DIR/'static'
     if config.projectEntropy:
         SECRET_KEY=config.projectEntropy
     if not config.in_build():
